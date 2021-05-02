@@ -46,7 +46,6 @@ const connection = mysql.createConnection({
 
 
   const addDepartment = () => {
-    // console.log('User wants to add a department');
     inquirer.prompt(
       {
         name: 'deptName',
@@ -68,8 +67,38 @@ const connection = mysql.createConnection({
     })
   }
 
+
   const addRole = () => {
-    console.log('User wants to add a role');
+    const deptArray = [];
+    connection.query('SELECT department_name FROM Departments', (err, results) => {
+      if (err) throw err;
+      // console.log(results);
+      for (i=0; i < results.length; i++) {
+        deptArray.push(results[i].department_name)
+      }      
+    inquirer.prompt([
+      {
+        name: 'deptChoice',
+        type: 'list',
+        message: 'What department does this role belong to?',
+        choices: deptArray,
+      },
+      {
+        name: 'roleTitle',
+        type: 'input',
+        message: 'What is the title of the role you would like to add?'
+      },
+      {
+        name: 'roleSalary',
+        type: 'input',
+        message: 'What is the salary for this role?'
+      },
+    ]).then((answers) => {
+      console.log(answers.roleTitle);
+      console.log(answers.roleSalary);
+      console.log(answers.deptChoice);
+    })
+  })
   }
 
   const addEmployee = () => {
