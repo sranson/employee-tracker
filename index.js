@@ -46,7 +46,26 @@ const connection = mysql.createConnection({
 
 
   const addDepartment = () => {
-    console.log('User wants to add a department');
+    // console.log('User wants to add a department');
+    inquirer.prompt(
+      {
+        name: 'deptName',
+        type: 'input',
+        message: 'What is the title of the Department?'
+      }
+    ).then((answer) => {
+      connection.query(
+        'INSERT INTO Departments SET ?',
+        {
+          department_name: answer.deptName
+        },
+        (err) => {
+          if (err) throw err;
+          console.log(`You have successfully added ${answer.deptName} to the Departments table`);
+          start();
+        }
+      )
+    })
   }
 
   const addRole = () => {
