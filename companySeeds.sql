@@ -9,25 +9,39 @@
     (department_name)
   VALUES('Marketing');
 
--- This creates type: MANAGER for the Sales department
+    INSERT INTO Departments 
+    (department_name)
+  VALUES('Engineering');
+
+-- This creates SALES MANAGER for the Sales department
 INSERT INTO Roles
   (role_title, role_salary, department_id)
-VALUES('Manager', 90000, 1);
+VALUES('Sales Manager', 90000, 1);
 
 
--- This creates type: EMPLOYEE for the Sales department
+-- This creates Salesperson for the Sales department
 INSERT INTO Roles
   (role_title, role_salary, department_id)
-VALUES('Employee', 70000, 1);
+VALUES('Salesperson', 70000, 1);
+
+-- This creates Lead Engineer for the Engineering department
+INSERT INTO Roles
+  (role_title, role_salary, department_id)
+VALUES('Lead Engineer', 120000, 3);
+
+-- This creates Software Engineer for the Engineering department
+INSERT INTO Roles
+  (role_title, role_salary, department_id)
+VALUES('Software Engineer', 100000, 3);
 
 
--- This adds to the employee table  ---> role: Manager ---> Dept: Sales
+-- This adds to the employee table  ---> Dept: Sales
 INSERT INTO Employees
   (first_name, last_name, role_id)
 VALUES('Amanda', 'Bradley', 1);
 
 
--- This adds to the employee table  ---> role: EMPLOYEE ---> Dept: Sales
+-- This adds to the employee table  ---> Dept: Sales
 INSERT INTO Employees
   (first_name, last_name, role_id)
 VALUES('Salome', 'Ranson', 2);
