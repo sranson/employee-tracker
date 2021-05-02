@@ -1,0 +1,30 @@
+{
+  "name": "employee-content-management-system",
+  "version": "1.0.0",
+  "description": "This is a node.js program that utilizes MySql to perform CRUD opertaions on an Employee Content Management System",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sranson/employee-tracker.git"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "MySql"
+  ],
+  "author": "Salome Ranson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sranson/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/sranson/employee-tracker#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1"
+  }
+}
