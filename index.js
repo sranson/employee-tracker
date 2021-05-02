@@ -1,5 +1,6 @@
 
 require(`dotenv`).config();
+const inquirer = require('inquirer');
 const mysql = require('mysql');
 
 
@@ -19,3 +20,42 @@ const connection = mysql.createConnection({
   });
 
   // console.log(connection);
+
+  const start = () => {
+    inquirer.prompt({
+      name: 'userAction',
+      type: 'list',
+      message: 'What would you like to do?',
+      choices: ['Add Department', 'Add Role', 'Add Employee'],
+    })
+    .then((answer) => {
+      // console.log(answer);
+      switch (answer.userAction) {
+        case "Add Department":
+          addDepartment();
+          break;
+        case "Add Role":
+          addRole();
+          break;
+        case "Add Employee":
+          addEmployee();
+          break;
+      }
+    })
+  }
+
+
+  const addDepartment = () => {
+    console.log('User wants to add a department');
+  }
+
+  const addRole = () => {
+    console.log('User wants to add a role');
+  }
+
+  const addEmployee = () => {
+    console.log('User wants to add an employee');
+  }
+
+
+  start();
