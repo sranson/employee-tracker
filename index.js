@@ -26,7 +26,7 @@ const connection = mysql.createConnection({
       name: 'userAction',
       type: 'list',
       message: 'What would you like to do?',
-      choices: ['Add Department', 'Add Role', 'Add Employee'],
+      choices: ['Add Department', 'Add Role', 'Add Employee', 'See All Employees'],
     })
     .then((answer) => {
       // console.log(answer);
@@ -40,6 +40,8 @@ const connection = mysql.createConnection({
         case "Add Employee":
           addEmployee();
           break;
+        case 'See All Employees':
+          seeAllEmployees()
       }
     })
   }
@@ -152,9 +154,17 @@ const connection = mysql.createConnection({
         choices: managerArray
       }
     ])
-    
     .then((answers) => {
       console.log(answers);
+    })
+  }
+
+  function seeAllEmployees() {
+    connection.query('SELECT * FROM Employees', (err, results) => {
+      if (err) throw err;
+      results.forEach((people) => {
+        console.log(people.first_name, people.last_name);
+      })
     })
   }
 
