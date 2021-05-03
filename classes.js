@@ -6,7 +6,14 @@ class Role {
     }
 }
 
+class Department {
+    constructor(deptName) {
+        this.deptName = deptName
+    }
+}
+
 
 module.export = {
-    Role
+    Role,
+    Department
 };

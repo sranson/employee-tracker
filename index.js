@@ -2,6 +2,7 @@
 require(`dotenv`).config();
 const inquirer = require('inquirer');
 const mysql = require('mysql');
+const cTable = require('console.table');
 
 
 
@@ -174,7 +175,11 @@ const connection = mysql.createConnection({
         let lastName = people.last_name
         let roleID = people.role_id
         let managerID = people.manager_id
-        console.log(`${firstName} ${lastName} --- Role ID: ${roleID} --- Manager ID: ${managerID}`);
+        console.log('--------------------------------------------------');
+        console.log(`Name: ${firstName} ${lastName}`);
+        console.log(`Role ID: ${roleID}`);
+        console.log(`Manager ID: ${managerID}`);
+        console.log('--------------------------------------------------');
       })
     })
   }
@@ -184,10 +189,11 @@ const connection = mysql.createConnection({
     connection.query('SELECT * FROM Departments', (err, results) => {
       if (err) throw err;
       results.forEach((depts) => {
-        console.log(depts.department_name);
+        console.log('--------------------------------------------------');
+        console.log(`Department Name: ${depts.department_name}`);
+        console.log('--------------------------------------------------');
       })
     })
-    start();
   }
 
 
@@ -195,14 +201,14 @@ const connection = mysql.createConnection({
     connection.query('SELECT * FROM Roles', (err, results) => {
       if (err) throw err;
       results.forEach((roles) => {
-        console.log(roles.role_id);
-        console.log(roles.role_title);
-        console.log(roles.role_salary);
-        console.log(roles.role_department);
+        console.log('--------------------------------------------------');
+        console.log(`Role ID: ${roles.role_id}`);
+        console.log(`Role Title: ${roles.role_title}`);
+        console.log(`Role Salary: ${roles.role_salary}`);
+        console.log(`Role Department: ${roles.role_department}`);
         console.log('--------------------------------------------------');
       })
     })
-    start();
   }
 
 
