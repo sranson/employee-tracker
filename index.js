@@ -4,6 +4,7 @@ const inquirer = require('inquirer');
 const mysql = require('mysql');
 
 
+
 // create the connection information for the sql database
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -68,13 +69,14 @@ const connection = mysql.createConnection({
   }
 
 
+
   const addRole = () => {
     const deptArray = [];
     connection.query('SELECT department_name FROM Departments', (err, results) => {
       if (err) throw err;
       // console.log(results);
       for (i=0; i < results.length; i++) {
-        deptArray.push(results[i].department_name)
+        deptArray.push(results[i].department_name);
       }      
     inquirer.prompt([
       {
@@ -94,9 +96,15 @@ const connection = mysql.createConnection({
         message: 'What is the salary for this role?'
       },
     ]).then((answers) => {
-      console.log(answers.roleTitle);
-      console.log(answers.roleSalary);
-      console.log(answers.deptChoice);
+      connection.query(
+        'INSERT INTO Roles SET ?',
+        {
+          role_title: answers.roleTitle,
+          role_salary: answers.roleSalary,
+        }
+      )
+      console.log('SUCCESSFULLY ADDED THE ROLE');
+      start();
     })
   })
   }
