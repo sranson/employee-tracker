@@ -26,7 +26,7 @@ const connection = mysql.createConnection({
       name: 'userAction',
       type: 'list',
       message: 'What would you like to do?',
-      choices: ['Add Department', 'Add Role', 'Add Employee', 'See All Employees'],
+      choices: ['Add Department', 'Add Role', 'Add Employee', 'See All Employees', 'See All Departments', 'See All Roles'],
     })
     .then((answer) => {
       // console.log(answer);
@@ -42,6 +42,13 @@ const connection = mysql.createConnection({
           break;
         case 'See All Employees':
           seeAllEmployees()
+          break;
+        case 'See All Departments':
+          seeAllDepartments()
+          break;
+        case 'See All Roles':
+          seeAllRoles()
+          break;
       }
     })
   }
@@ -163,10 +170,41 @@ const connection = mysql.createConnection({
     connection.query('SELECT * FROM Employees', (err, results) => {
       if (err) throw err;
       results.forEach((people) => {
-        console.log(people.first_name, people.last_name);
+        let firstName = people.first_name;
+        let lastName = people.last_name
+        let roleID = people.role_id
+        let managerID = people.manager_id
+        console.log(`${firstName} ${lastName} --- Role ID: ${roleID} --- Manager ID: ${managerID}`);
       })
     })
   }
+
+
+  function seeAllDepartments() {
+    connection.query('SELECT * FROM Departments', (err, results) => {
+      if (err) throw err;
+      results.forEach((depts) => {
+        console.log(depts.department_name);
+      })
+    })
+    start();
+  }
+
+
+  function seeAllRoles() {
+    connection.query('SELECT * FROM Roles', (err, results) => {
+      if (err) throw err;
+      results.forEach((roles) => {
+        console.log(roles.role_id);
+        console.log(roles.role_title);
+        console.log(roles.role_salary);
+        console.log(roles.role_department);
+        console.log('--------------------------------------------------');
+      })
+    })
+    start();
+  }
+
 
 
   start();
