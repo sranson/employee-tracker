@@ -20,7 +20,6 @@ const connection = mysql.createConnection({
     database: process.env.DB_DATABASE,
   });
 
-  // console.log(connection);
 
   const start = () => {
     inquirer.prompt({
@@ -71,46 +70,92 @@ const connection = mysql.createConnection({
 
 
   const addRole = () => {
-    const deptArray = [];
-    connection.query('SELECT department_name FROM Departments', (err, results) => {
-      if (err) throw err;
-      // console.log(results);
-      for (i=0; i < results.length; i++) {
-        deptArray.push(results[i].department_name);
-      }      
-    inquirer.prompt([
-      {
-        name: 'deptChoice',
-        type: 'list',
-        message: 'What department does this role belong to?',
-        choices: deptArray,
-      },
-      {
-        name: 'roleTitle',
-        type: 'input',
-        message: 'What is the title of the role you would like to add?'
-      },
-      {
-        name: 'roleSalary',
-        type: 'input',
-        message: 'What is the salary for this role?'
-      },
-    ]).then((answers) => {
-      connection.query(
-        'INSERT INTO Roles SET ?',
+      const deptArray = [];
+      connection.query('SELECT department_name FROM Departments', (err, results) => {
+        if (err) throw err;
+        for (i=0; i < results.length; i++) {
+          deptArray.push(results[i].department_name);
+        }      
+      inquirer.prompt([
         {
-          role_title: answers.roleTitle,
-          role_salary: answers.roleSalary,
-        }
-      )
-      console.log('SUCCESSFULLY ADDED THE ROLE');
-      start();
+          name: 'deptChoice',
+          type: 'rawlist',
+          message: 'What department does this role belong to?',
+          choices: deptArray,
+        },
+        {
+          name: 'roleTitle',
+          type: 'input',
+          message: 'What is the title of the role you would like to add?'
+        },
+        {
+          name: 'roleSalary',
+          type: 'input',
+          message: 'What is the salary for this role?'
+        },
+      ]).then((answers) => {
+        connection.query(
+          'INSERT INTO Roles SET ?',
+          {
+            role_title: answers.roleTitle,
+            role_salary: answers.roleSalary,
+            role_department: answers.deptChoice
+          }
+        )
+        console.log('SUCCESSFULLY ADDED THE ROLE');
+        start();
+      })
     })
-  })
   }
 
-  const addEmployee = () => {
-    console.log('User wants to add an employee');
+
+  const addEmployee = () => {   
+    const roleArray = []; 
+    const managerArray = [];
+    connection.query('SELECT role_title FROM Roles', (err, results) => {
+      if (err) throw err;
+        for (i=0; i < results.length; i++) {
+          roleArray.push(results[i].role_title);
+        }  
+      })  
+
+      connection.query('SELECT first_name, last_name FROM Employees', (err, results) => {
+        if (err) throw err;
+          for (i=0; i < results.length; i++) {
+            let firstName = results[i].first_name;
+            let lastName = results[i].last_name;
+            let fullName = `${firstName} ${lastName}`
+            managerArray.push(fullName);
+          }  
+        })  
+    inquirer.prompt([
+      {
+        name: 'firstName',
+        type: 'input',
+        message: 'What is the employee\s first name?'
+      },
+      {
+        name: 'lastName',
+        type: 'input',
+        message: 'What is the employee\'s last name?'
+      },
+      {
+        name: 'employeeRole',
+        type: 'rawlist',
+        message: 'What is the employee\'s role?',
+        choices: roleArray
+      },
+      {
+        name: 'managerName',
+        type: 'rawlist',
+        message: 'Who is the employee\'s manager?',
+        choices: managerArray
+      }
+    ])
+    
+    .then((answers) => {
+      console.log(answers);
+    })
   }
 
 

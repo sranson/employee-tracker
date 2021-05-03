@@ -15,24 +15,24 @@
 
 -- This creates SALES MANAGER for the Sales department
 INSERT INTO Roles
-  (role_title, role_salary, department_id)
-VALUES('Sales Manager', 90000, 1);
+  (role_title, role_salary, role_department, department_id)
+VALUES('Sales Manager', 90000, 'Sales' ,1);
 
 
--- This creates Salesperson for the Sales department
+-- This creates Sales person for the Sales department
 INSERT INTO Roles
-  (role_title, role_salary, department_id)
-VALUES('Salesperson', 70000, 1);
+  (role_title, role_salary, role_department, department_id)
+VALUES('Salesperson', 70000, 'Sales', 1);
 
 -- This creates Lead Engineer for the Engineering department
 INSERT INTO Roles
-  (role_title, role_salary, department_id)
-VALUES('Lead Engineer', 120000, 3);
+  (role_title, role_salary, role_department, department_id)
+VALUES('Lead Engineer', 120000, 'Engineering', 3);
 
 -- This creates Software Engineer for the Engineering department
 INSERT INTO Roles
-  (role_title, role_salary, department_id)
-VALUES('Software Engineer', 100000, 3);
+  (role_title, role_salary, role_department, department_id)
+VALUES('Software Engineer', 100000, 'Engineering', 3);
 
 
 -- This adds to the employee table  ---> Dept: Sales
