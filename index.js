@@ -121,71 +121,80 @@ const addRole = () => {
 };
 
 const addEmployee = () => {
-  const roleArray = [];
-  const managerArray = [];
-  connection.query("SELECT role_title FROM Roles", (err, results) => {
+  connection.query("SELECT role_title, role_id FROM Roles", (err, results) => {
     if (err) throw err;
-    for (i = 0; i < results.length; i++) {
-      roleArray.push(results[i].role_title);
-    }
-  });
-
-  connection.query(
-    "SELECT first_name, last_name FROM Employees",
-    (err, results) => {
-      if (err) throw err;
-      for (i = 0; i < results.length; i++) {
-        let firstName = results[i].first_name;
-        let lastName = results[i].last_name;
-        let fullName = `${firstName} ${lastName}`;
-        managerArray.push(fullName);
-      }
-    }
-  );
-  inquirer
-    .prompt([
-      {
-        name: "firstName",
-        type: "input",
-        message: "What is the employees first name?",
-      },
-      {
-        name: "lastName",
-        type: "input",
-        message: "What is the employee's last name?",
-      },
-      {
-        name: "employeeRole",
-        type: "rawlist",
-        message: "What is the employee's role?",
-        choices: roleArray,
-      },
-      {
-        name: "managerName",
-        type: "rawlist",
-        message: "Who is the employee's manager?",
-        choices: managerArray,
-      },
-    ])
-    .then((answers) => {
-      console.log(answers);
+    const mappedRoles = results.map((rolez) => {
+      return {
+        name: rolez.role_title,
+        value: rolez.role_id,
+      };
     });
+
+    connection.query(
+      "SELECT first_name, last_name, employee_id FROM Employees",
+      (err, results) => {
+        if (err) throw err;
+        const mappedManagers = results.map((managers) => {
+          let firstName = managers.first_name;
+          let lastName = managers.last_name;
+          return {
+            name: `${firstName} ${lastName}`,
+            value: managers.employee_id,
+          };
+        });
+        inquirer
+          .prompt([
+            {
+              name: "firstName",
+              type: "input",
+              message: "What is the employees first name?",
+            },
+            {
+              name: "lastName",
+              type: "input",
+              message: "What is the employee's last name?",
+            },
+            {
+              name: "employeeRole",
+              type: "rawlist",
+              message: "What is the employee's role?",
+              choices: mappedRoles,
+            },
+            {
+              name: "managerName",
+              type: "rawlist",
+              message: "Who is the employee's manager?",
+              choices: mappedManagers,
+            },
+          ])
+          .then((answers) => {
+            connection.query("INSERT INTO Employees SET ?", {
+              first_name: answers.firstName,
+              last_name: answers.lastName,
+              role_id: answers.employeeRole,
+              manager_id: answers.managerName,
+            });
+            console.log("SUCCESSFULLY ADDED EMPLOYEE TO DATABASE");
+            start();
+          });
+      }
+    );
+  });
 };
 
 function seeAllEmployees() {
+  employeeArray = [];
   connection.query("SELECT * FROM Employees", (err, results) => {
     if (err) throw err;
     results.forEach((people) => {
+      let employeeID = people.employee_id;
       let firstName = people.first_name;
       let lastName = people.last_name;
       let roleID = people.role_id;
       let managerID = people.manager_id;
-      console.log("--------------------------------------------------");
-      console.log(`Name: ${firstName} ${lastName}`);
-      console.log(`Role ID: ${roleID}`);
-      console.log(`Manager ID: ${managerID}`);
-      console.log("--------------------------------------------------");
+      employeeArray.push(employeeID, firstName, lastName, roleID, managerID);
     });
+    // console.log(employeeArray);
   });
 }
 
