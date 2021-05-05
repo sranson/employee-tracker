@@ -183,19 +183,21 @@ const addEmployee = () => {
 };
 
 function seeAllEmployees() {
-  employeeArray = [];
-  connection.query("SELECT * FROM Employees", (err, results) => {
-    if (err) throw err;
-    results.forEach((people) => {
-      let employeeID = people.employee_id;
-      let firstName = people.first_name;
-      let lastName = people.last_name;
-      let roleID = people.role_id;
-      let managerID = people.manager_id;
-      employeeArray.push(employeeID, firstName, lastName, roleID, managerID);
-    });
-    // console.log(employeeArray);
-  });
+  connection.query(
+    "SELECT Employees.employee_id, Employees.first_name, Employees.last_name, Employees.manager_id, Roles.role_title, Roles.role_salary, Departments.department_name FROM Employees, Roles, Departments WHERE Employees.role_id = Roles.role_id AND Departments.department_id = Roles.department_id; ",
+    (err, results) => {
+      if (err) throw err;
+      const mappedEmployees = results.map((employeez) => {
+        console.log(`Employee ID: ${employeez.employee_id}`);
+        console.log(`First Name: ${employeez.first_name}`);
+        console.log(`Last Name: ${employeez.last_name}`);
+        console.log(`Manager ID: ${employeez.manager_id}`);
+        console.log(`Role: ${employeez.role_title}`);
+        console.log(`Salary: ${employeez.role_salary}`);
+        console.log(`Department Name: ${employeez.department_name}`);
+      });
+    }
+  );
 }
 
 function seeAllDepartments() {
