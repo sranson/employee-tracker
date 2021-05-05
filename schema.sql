@@ -35,4 +35,3 @@ CREATE TABLE Employees
 
 
 
--- SELECT  Roles.role_title, Roles.department_id FROM Roles LEFT JOIN Departments USING (department_id);

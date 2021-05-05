@@ -1,19 +1,12 @@
+const mysql = require("mysql");
 require(`dotenv`).config();
 const inquirer = require("inquirer");
-const mysql = require("mysql");
 const cTable = require("console.table");
 
-// create the connection information for the sql database
 const connection = mysql.createConnection({
   host: "localhost",
-
-  // Your port; if not 3306
   port: 3306,
-
-  // Your username
   user: process.env.DB_USERNAME,
-
-  // Your password
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
 });
@@ -66,6 +59,7 @@ const addDepartment = () => {
       message: "What is the title of the Department?",
     })
     .then((answer) => {
+      console.log(answer);
       connection.query(
         "INSERT INTO Departments SET ?",
         {
