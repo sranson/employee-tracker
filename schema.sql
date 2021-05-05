@@ -17,7 +17,6 @@ CREATE TABLE Roles
     role_id INT AUTO_INCREMENT,
     role_title VARCHAR (30) UNIQUE NOT NULL,
     role_salary DECIMAL NOT NULL,
-    role_department VARCHAR (30) NOT NULL,
     department_id INT,
     PRIMARY KEY(role_id),
     FOREIGN KEY (department_id) REFERENCES Departments(department_id)
@@ -33,3 +32,7 @@ CREATE TABLE Employees
     FOREIGN KEY (role_id) REFERENCES Roles(role_id),
     FOREIGN KEY (manager_id) REFERENCES Employees(employee_id)
 )
+
+
+
+-- SELECT  Roles.role_title, Roles.department_id FROM Roles LEFT JOIN Departments USING (department_id);
