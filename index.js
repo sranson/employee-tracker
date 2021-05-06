@@ -199,10 +199,14 @@ function seeAllEmployees() {
             department: employeez.department_name,
           },
         ]);
+        console.log("");
         console.table(table);
       });
     }
   );
+  console.log("");
+  start();
+  console.log("");
 }
 
 function seeAllDepartments() {
