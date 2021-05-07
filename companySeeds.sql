@@ -3,12 +3,12 @@
   -- -- Seeding data..
   INSERT INTO Departments 
     (department_name)
-  VALUES('Sales'), ('Marketing'), ('Engineering'), ('Finance'), ('Legal') ;
+  VALUES('Sales'), ('Marketing'), ('Engineering'), ('Finance'), ('Legal'), ('Implementation') ;
 
 -- This creates SALES MANAGER for the Sales department
 INSERT INTO Roles
   (role_title, role_salary, department_id)
-VALUES ('Salesperson', 70000, 1), ('Graphic Designer', 65000, 2), ('Lead Engineer', 120000, 3), ('Software Engineer', 100000, 3), ('Business Analyst', 80000, 4), ('Quality Analyst', 80000, 4), ('Attorney', 90000, 5), ('Paralegal', 45000, 5);
+VALUES ('Salesperson', 70000, 1), ('Graphic Designer', 65000, 2), ('Lead Engineer', 120000, 3), ('Software Engineer', 100000, 3), ('Business Analyst', 80000, 6), ('Quality Analyst', 80000, 6), ('Attorney', 90000, 5), ('Paralegal', 45000, 5);
 
 
 
@@ -32,6 +32,6 @@ VALUES
 ('Michael', 'Jordan', 4, 3),
 ('Chris', 'Brown', 5, 4),
 ('Ashley', 'Louis', 5, 5),
-('Sarah', 'Lourd', 1, 1),
-('Tom', 'Allen', 2, 2);
+('Sarah', 'Lourd', 7, 1),
+('Tom', 'Allen', 8, 2);
 

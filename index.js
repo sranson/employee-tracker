@@ -189,19 +189,15 @@ function seeAllEmployees() {
     (err, results) => {
       if (err) throw err;
       const mappedEmployees = results.map((employeez) => {
-        const table = cTable.getTable([
-          {
-            id: employeez.employee_id,
-            first_name: employeez.first_name,
-            last_name: employeez.last_name,
-            manager: employeez.manager_id,
-            role: employeez.role_title,
-            salary: employeez.role_salary,
-            department: employeez.department_name,
-          },
-        ]);
-        console.log("");
-        console.table(table);
+        console.log("--------------------------------------------------");
+        console.log(`ID: ${employeez.employee_id}`);
+        console.log(`First Name: ${employeez.first_name}`);
+        console.log(`Last Name: ${employeez.last_name}`);
+        console.log(`Manager: ${employeez.manager_id}`);
+        console.log(`Role: ${employeez.role_title}`);
+        console.log(`Salary: ${employeez.role_salary}`);
+        console.log(`Department: ${employeez.department_name}`);
+        console.log("--------------------------------------------------");
       });
     }
   );
@@ -215,6 +211,7 @@ function seeAllDepartments() {
     if (err) throw err;
     results.forEach((depts) => {
       console.log("--------------------------------------------------");
+      console.log(`Department ID: ${depts.department_id}`);
       console.log(`Department Name: ${depts.department_name}`);
     });
   });
