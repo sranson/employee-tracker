@@ -25,6 +25,7 @@ const start = () => {
         "See All Departments",
         "See All Roles",
         "Update Employee Role",
+        "Exit",
       ],
     })
     .then((answer) => {
@@ -51,6 +52,9 @@ const start = () => {
         case "Update Employee Role":
           selectEmployeeToUpdate();
           break;
+        case "Exit":
+          exitProgram();
+          break;
       }
     });
   console.log(``);
@@ -64,7 +68,6 @@ const addDepartment = () => {
       message: "What is the title of the Department?",
     })
     .then((answer) => {
-      console.log(answer);
       connection.query(
         "INSERT INTO Departments SET ?",
         {
@@ -205,9 +208,9 @@ function seeAllEmployees() {
       });
     }
   );
-  console.log("");
+  // console.log("");
   start();
-  console.log("");
+  // console.log("");
 }
 
 function seeAllDepartments() {
@@ -310,17 +313,12 @@ function updateRoleInDatabase(empID, roleID) {
     },
   ]);
   console.log("SUCCESSFULLY UPDATED EMPLOYEE ROLE");
+  start();
 }
 
-// .then((answers) => {
-//   connection.query("INSERT INTO Employees SET ?", {
-//     first_name: answers.firstName,
-//     last_name: answers.lastName,
-//     role_id: answers.employeeRole,
-//     manager_id: answers.managerName,
-//   });
-//   console.log("SUCCESSFULLY ADDED EMPLOYEE TO DATABASE");
-//   start();
-// });
+function exitProgram() {
+  console.log("GOODBYE");
+  connection.end();
+}
 
 start();
