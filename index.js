@@ -21,10 +21,11 @@ const start = () => {
         "Add Department",
         "Add Role",
         "Add Employee",
-        "See All Employees",
         "See All Departments",
         "See All Roles",
+        "See All Employees",
         "Update Employee Role",
+        "Update Employee Manager",
         "Exit",
       ],
     })
@@ -51,6 +52,9 @@ const start = () => {
           break;
         case "Update Employee Role":
           selectEmployeeToUpdate();
+          break;
+        case "Update Employee Manager":
+          startManagerUpdate();
           break;
         case "Exit":
           exitProgram();
@@ -246,14 +250,12 @@ function seeAllRoles() {
 function selectEmployeeToUpdate() {
   connection.query("SELECT * FROM Employees", (err, results) => {
     if (err) throw err;
-    const mappedEmployees = results.map(
-      (employeez) => {
-        return {
-          name: `${employeez.first_name} ${employeez.last_name}`,
-          value: employeez.employee_id,
-        }; // End of return
-      } // End of mappedEmployees const
-    ); // End of connection.query
+    const mappedEmployees = results.map((employeez) => {
+      return {
+        name: `${employeez.first_name} ${employeez.last_name}`,
+        value: employeez.employee_id,
+      };
+    });
     inquirer
       .prompt([
         {
@@ -270,7 +272,7 @@ function selectEmployeeToUpdate() {
 }
 
 function updateRole(answer) {
-  console.log(answer); // This is the employee_id for the employee that will be updated
+  // console.log(answer); // This is the employee_id for the employee that will be updated
   let empIdToUpdate = answer.employeeToUpdate;
 
   connection.query("SELECT * FROM Roles", (err, results) => {
@@ -291,14 +293,11 @@ function updateRole(answer) {
         },
       ])
       .then((response) => {
-        // console.log(empIdToUpdate);
-        // console.log(response.newRole);
         let empID = empIdToUpdate;
         let roleID = response.newRole;
         updateRoleInDatabase(empID, roleID);
       });
   });
-  // console.log(answer);
 }
 
 function updateRoleInDatabase(empID, roleID) {
@@ -313,6 +312,79 @@ function updateRoleInDatabase(empID, roleID) {
     },
   ]);
   console.log("SUCCESSFULLY UPDATED EMPLOYEE ROLE");
+  start();
+}
+
+function startManagerUpdate() {
+  connection.query(
+    "SELECT * FROM Employees WHERE manager_id IS NOT NULL",
+    (err, results) => {
+      if (err) throw err;
+      const mappedEmployees = results.map((employeez) => {
+        return {
+          name: `${employeez.first_name} ${employeez.last_name}`,
+          value: employeez.employee_id,
+        };
+      });
+      inquirer
+        .prompt([
+          {
+            name: "employeeManagerUpdate",
+            type: "rawlist",
+            message: "What employee needs a Manager Update?",
+            choices: mappedEmployees,
+          },
+        ])
+        .then((answer) => {
+          let empToUpdate = answer.employeeManagerUpdate;
+          console.log(` Answer From startManagerUpdate(): ${empToUpdate}`);
+          updateManager(empToUpdate);
+        });
+    }
+  );
+}
+
+function updateManager(empToUpdate) {
+  let empIdToUpdate = empToUpdate;
+
+  connection.query(
+    "SELECT * FROM Employees WHERE manager_id IS NULL",
+    (err, results) => {
+      if (err) throw err;
+      const mappedManager = results.map((results) => {
+        return {
+          name: `${results.first_name} ${results.last_name}`,
+          value: `${results.employee_id}`,
+        };
+      });
+      inquirer
+        .prompt([
+          {
+            name: "newManager",
+            type: "rawlist",
+            message: "Who is this employee's new manager?",
+            choices: mappedManager,
+          },
+        ])
+        .then((response) => {
+          let empID = empIdToUpdate;
+          let managerID = response.newManager;
+          updateManagerInDatabase(empID, managerID);
+        });
+    }
+  );
+}
+
+function updateManagerInDatabase(empID, managerID) {
+  connection.query("UPDATE Employees SET ? WHERE ?", [
+    {
+      manager_id: managerID,
+    },
+    {
+      employee_id: empID,
+    },
+  ]);
+  console.log("SUCCESSFULLY UPDATED EMPLOYEE MANAGER");
   start();
 }
 
