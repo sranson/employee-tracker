@@ -49,6 +49,7 @@ const start = () => {
           break;
       }
     });
+  console.log(``);
 };
 
 const addDepartment = () => {
@@ -215,23 +216,27 @@ function seeAllDepartments() {
     results.forEach((depts) => {
       console.log("--------------------------------------------------");
       console.log(`Department Name: ${depts.department_name}`);
-      console.log("--------------------------------------------------");
     });
   });
+  start();
 }
 
 function seeAllRoles() {
-  connection.query("SELECT * FROM Roles", (err, results) => {
-    if (err) throw err;
-    results.forEach((roles) => {
-      console.log("--------------------------------------------------");
-      console.log(`Role ID: ${roles.role_id}`);
-      console.log(`Role Title: ${roles.role_title}`);
-      console.log(`Role Salary: ${roles.role_salary}`);
-      console.log(`Role Department: ${roles.role_department}`);
-      console.log("--------------------------------------------------");
-    });
-  });
+  connection.query(
+    "SELECT Roles.role_id, Roles.role_title, Roles.role_salary, Departments.department_name FROM Roles, Departments WHERE Roles.role_id = Departments.department_id;",
+    (err, results) => {
+      if (err) throw err;
+      results.forEach((roles) => {
+        // console.log(roles);
+        console.log("--------------------------------------------------");
+        console.log(`Role ID: ${roles.role_id}`);
+        console.log(`Role Title: ${roles.role_title}`);
+        console.log(`Role Salary: ${roles.role_salary}`);
+        console.log(`Role Department: ${roles.department_name}`);
+        console.log("--------------------------------------------------");
+      });
+    }
+  );
 }
 
 start();
