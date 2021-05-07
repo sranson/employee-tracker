@@ -24,6 +24,7 @@ const start = () => {
         "See All Employees",
         "See All Departments",
         "See All Roles",
+        "Update Employee Role",
       ],
     })
     .then((answer) => {
@@ -46,6 +47,9 @@ const start = () => {
           break;
         case "See All Roles":
           seeAllRoles();
+          break;
+        case "Update Employee Role":
+          selectEmployeeToUpdate();
           break;
       }
     });
@@ -185,18 +189,18 @@ const addEmployee = () => {
 
 function seeAllEmployees() {
   connection.query(
-    "SELECT Employees.employee_id, Employees.first_name, Employees.last_name, Employees.manager_id, Roles.role_title, Roles.role_salary, Departments.department_name FROM Employees, Roles, Departments WHERE Employees.role_id = Roles.role_id AND Departments.department_id = Roles.department_id; ",
+    "SELECT emp.employee_id AS 'ID', concat(emp.first_name, ' ' ,emp.last_name) AS 'Employee', concat(man.first_name, ' ' ,man.last_name) AS 'Manager', Roles.role_title AS 'Role', Roles.role_salary AS 'Salary', Departments.department_name AS 'Department' FROM Employees emp, Employees man, Roles, Departments WHERE emp.role_id = Roles.role_id AND Departments.department_id = Roles.department_id  AND man.employee_id = emp.manager_id UNION  SELECT Employees.employee_id, concat(Employees.first_name, ' ' ,Employees.last_name) AS 'Employee', Employees.manager_id, Roles.role_title AS 'Role', Roles.role_salary AS 'Salary', Departments.department_name AS 'Department' FROM Employees, Roles, Departments WHERE Employees.role_id = Roles.role_id AND Roles.department_id = Departments.department_id AND Employees.manager_id IS NULL ORDER BY ID; ",
     (err, results) => {
       if (err) throw err;
       const mappedEmployees = results.map((employeez) => {
+        // console.log(employeez);
         console.log("--------------------------------------------------");
-        console.log(`ID: ${employeez.employee_id}`);
-        console.log(`First Name: ${employeez.first_name}`);
-        console.log(`Last Name: ${employeez.last_name}`);
-        console.log(`Manager: ${employeez.manager_id}`);
-        console.log(`Role: ${employeez.role_title}`);
-        console.log(`Salary: ${employeez.role_salary}`);
-        console.log(`Department: ${employeez.department_name}`);
+        console.log(`ID: ${employeez.ID}`);
+        console.log(`Name: ${employeez.Employee}`);
+        console.log(`Manager: ${employeez.Manager}`);
+        console.log(`Role: ${employeez.Role}`);
+        console.log(`Salary: $${employeez.Salary}`);
+        console.log(`Department: ${employeez.Department}`);
         console.log("--------------------------------------------------");
       });
     }
@@ -235,5 +239,88 @@ function seeAllRoles() {
   );
   start();
 }
+
+function selectEmployeeToUpdate() {
+  connection.query("SELECT * FROM Employees", (err, results) => {
+    if (err) throw err;
+    const mappedEmployees = results.map(
+      (employeez) => {
+        return {
+          name: `${employeez.first_name} ${employeez.last_name}`,
+          value: employeez.employee_id,
+        }; // End of return
+      } // End of mappedEmployees const
+    ); // End of connection.query
+    inquirer
+      .prompt([
+        {
+          name: "employeeToUpdate",
+          type: "rawlist",
+          message: "What employee needs a Role Update?",
+          choices: mappedEmployees,
+        },
+      ])
+      .then((answer) => {
+        updateRole(answer);
+      });
+  });
+}
+
+function updateRole(answer) {
+  console.log(answer); // This is the employee_id for the employee that will be updated
+  let empIdToUpdate = answer.employeeToUpdate;
+
+  connection.query("SELECT * FROM Roles", (err, results) => {
+    if (err) throw err;
+    const mappedRoles = results.map((results) => {
+      return {
+        name: `${results.role_title}`,
+        value: `${results.role_id}`,
+      };
+    });
+    inquirer
+      .prompt([
+        {
+          name: "newRole",
+          type: "rawlist",
+          message: "What is this employee's new role?",
+          choices: mappedRoles,
+        },
+      ])
+      .then((response) => {
+        // console.log(empIdToUpdate);
+        // console.log(response.newRole);
+        let empID = empIdToUpdate;
+        let roleID = response.newRole;
+        updateRoleInDatabase(empID, roleID);
+      });
+  });
+  // console.log(answer);
+}
+
+function updateRoleInDatabase(empID, roleID) {
+  // console.log(empID);
+  // console.log(roleID);
+  connection.query("UPDATE Employees SET ? WHERE ?", [
+    {
+      role_id: roleID,
+    },
+    {
+      employee_id: empID,
+    },
+  ]);
+  console.log("SUCCESSFULLY UPDATED EMPLOYEE ROLE");
+}
+
+// .then((answers) => {
+//   connection.query("INSERT INTO Employees SET ?", {
+//     first_name: answers.firstName,
+//     last_name: answers.lastName,
+//     role_id: answers.employeeRole,
+//     manager_id: answers.managerName,
+//   });
+//   console.log("SUCCESSFULLY ADDED EMPLOYEE TO DATABASE");
+//   start();
+// });
 
 start();
