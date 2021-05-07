@@ -15,7 +15,7 @@ CREATE TABLE Departments
 CREATE TABLE Roles
 (
     role_id INT AUTO_INCREMENT,
-    role_title VARCHAR (30) UNIQUE NOT NULL,
+    role_title VARCHAR (30) NOT NULL,
     role_salary DECIMAL NOT NULL,
     department_id INT,
     PRIMARY KEY(role_id),

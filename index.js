@@ -223,11 +223,10 @@ function seeAllDepartments() {
 
 function seeAllRoles() {
   connection.query(
-    "SELECT Roles.role_id, Roles.role_title, Roles.role_salary, Departments.department_name FROM Roles, Departments WHERE Roles.role_id = Departments.department_id;",
+    "SELECT Roles.role_id, Roles.role_title, Roles.role_salary, Departments.department_name FROM Roles, Departments WHERE Roles.department_id = Departments.department_id;",
     (err, results) => {
       if (err) throw err;
       results.forEach((roles) => {
-        // console.log(roles);
         console.log("--------------------------------------------------");
         console.log(`Role ID: ${roles.role_id}`);
         console.log(`Role Title: ${roles.role_title}`);
@@ -237,6 +236,7 @@ function seeAllRoles() {
       });
     }
   );
+  start();
 }
 
 start();
