@@ -41,6 +41,7 @@ source companySeeds.sql;
 ## Video Demonstration
 
 [Video Demonstration Part 1](https://www.youtube.com/watch?v=dHcbi94hGYs)
+
 [Video Demonstration Part 2](https://www.youtube.com/watch?v=8Vat3HqAMm4)
 
 ## Questions
