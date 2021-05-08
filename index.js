@@ -28,6 +28,7 @@ const start = () => {
         "Update Employee Manager",
         "See All Employees by Manager",
         "Delete a Department",
+        "Delete a Role",
         "Exit",
       ],
     })
@@ -63,6 +64,9 @@ const start = () => {
           break;
         case "Delete a Department":
           deleteDepartment();
+          break;
+        case "Delete a Role":
+          deleteRole();
           break;
         case "Exit":
           exitProgram();
@@ -477,6 +481,10 @@ function deleteDepartment() {
 function exitProgram() {
   console.log("GOODBYE");
   connection.end();
+}
+
+function deleteRole() {
+  console.log(`DELETE A ROLE!`);
 }
 
 start();
