@@ -460,7 +460,7 @@ function deleteDepartment() {
         {
           name: "deleteDept",
           type: "rawlist",
-          message: "Which department would you like to delete?",
+          message: "Which Department would you like to delete?",
           choices: mappedDepts,
         },
       ])
@@ -484,7 +484,34 @@ function exitProgram() {
 }
 
 function deleteRole() {
-  console.log(`DELETE A ROLE!`);
+  connection.query("SELECT * FROM Roles", (err, res) => {
+    if (err) throw err;
+    const mappedRoles = res.map((roles) => {
+      return {
+        name: roles.role_title,
+        value: roles.role_id,
+      };
+    });
+    inquirer
+      .prompt([
+        {
+          name: "deleteRole",
+          type: "rawlist",
+          message: "Which Role would you like to delete?",
+          choices: mappedRoles,
+        },
+      ])
+      .then((response) => {
+        let roleToDelete = response.deleteRole;
+        connection.query("DELETE FROM ROLES WHERE ?", [
+          {
+            role_id: roleToDelete,
+          },
+        ]);
+        console.log("SUCCESSFULLY DELETED THE ROLE");
+        start();
+      });
+  });
 }
 
 start();
