@@ -8,13 +8,15 @@ This is a node.js program that runs in the terminal and utilizes MySQL queries t
 
 ## Table of Contents
 
-[Usage](https://github.com/sranson/note-taker#Usage)
+[Usage](https://github.com/sranson/employee-tracker#Usage)
 
-[Questions](https://github.com/sranson/note-taker#Questions)
+[Video Demonstration](https://github.com/sranson/employee-tracker#Video-Demonstration)
 
-[Contributing](https://github.com/sranson/note-taker#Contributing)
+[Questions](https://github.com/sranson/employee-tracker#Questions)
 
-[License](https://github.com/sranson/note-taker#License)
+[Contributing](https://github.com/sranson/employee-tracker#Contributing)
+
+[License](https://github.com/sranson/employee-tracker#License)
 
 ## Usage
 
@@ -35,6 +37,11 @@ To seed data, from your MySQL instance, run:
 ```python
 source companySeeds.sql;
 ```
+
+## Video Demonstration
+
+[Video Demonstration Part 1](https://www.youtube.com/watch?v=dHcbi94hGYs)
+[Video Demonstration Part 2](https://www.youtube.com/watch?v=8Vat3HqAMm4)
 
 ## Questions
 
