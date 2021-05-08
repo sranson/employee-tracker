@@ -29,6 +29,7 @@ const start = () => {
         "See All Employees by Manager",
         "Delete a Department",
         "Delete a Role",
+        "Delete an Employee",
         "Exit",
       ],
     })
@@ -67,6 +68,9 @@ const start = () => {
           break;
         case "Delete a Role":
           deleteRole();
+          break;
+        case "Delete an Employee":
+          deleteEmployee();
           break;
         case "Exit":
           exitProgram();
@@ -478,11 +482,6 @@ function deleteDepartment() {
   });
 }
 
-function exitProgram() {
-  console.log("GOODBYE");
-  connection.end();
-}
-
 function deleteRole() {
   connection.query("SELECT * FROM Roles", (err, res) => {
     if (err) throw err;
@@ -512,6 +511,15 @@ function deleteRole() {
         start();
       });
   });
+}
+
+function deleteEmployee() {
+  console.log(`SOMEONE QUIT OR GOT FIRED!!!!`);
+}
+
+function exitProgram() {
+  console.log("GOODBYE");
+  connection.end();
 }
 
 start();
