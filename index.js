@@ -461,7 +461,15 @@ function deleteDepartment() {
         },
       ])
       .then((response) => {
-        console.log(response.deleteDept);
+        // console.log(response.deleteDept);
+        let deptToDelete = response.deleteDept;
+        connection.query("DELETE FROM Departments WHERE ?", [
+          {
+            department_id: deptToDelete,
+          },
+        ]);
+        console.log("SUCCESSFULLY DELETED THE DEPARTMENT");
+        start();
       });
   });
 }
