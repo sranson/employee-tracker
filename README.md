@@ -4,13 +4,11 @@
 
 ## Description
 
-This is a node.js program that utilizes MySql to perform CRUD operations on an Employee Content Management System
+This is a node.js program that runs in the terminal and utilizes MySQL queries to perform CRUD operations on an Employee Content Management System
 
 ## Table of Contents
 
 [Usage](https://github.com/sranson/note-taker#Usage)
-
-[Screenshots](https://github.com/sranson/note-taker#Screenshots)
 
 [Questions](https://github.com/sranson/note-taker#Questions)
 
@@ -20,7 +18,11 @@ This is a node.js program that utilizes MySql to perform CRUD operations on an E
 
 ## Usage
 
-To start the program, run 'npm start'
+To run the program:
+
+```python
+npm start
+```
 
 ## Questions
 
