@@ -80,6 +80,8 @@ const start = () => {
   console.log(``);
 };
 
+// ----------------------- CREATE FUNCTIONS ---------------------
+
 const addDepartment = () => {
   inquirer
     .prompt({
@@ -104,6 +106,8 @@ const addDepartment = () => {
     });
 };
 
+// Query: Get * from Departments;
+// Query: INSERT INTO Roles;
 const addRole = () => {
   connection.query(
     "SELECT department_name, department_id FROM Departments",
@@ -115,7 +119,6 @@ const addRole = () => {
           value: department.department_id,
         };
       });
-      // console.log(mappedResults);
       inquirer
         .prompt([
           {
@@ -148,6 +151,9 @@ const addRole = () => {
   );
 };
 
+// Query: SELECT * FROM Roles;
+// Query SELECT * FROM Employees
+// Query INSERT INTO Employees
 const addEmployee = () => {
   connection.query("SELECT role_title, role_id FROM Roles", (err, results) => {
     if (err) throw err;
@@ -210,6 +216,9 @@ const addEmployee = () => {
   });
 };
 
+// ----------------------- READ FUNCTIONS ---------------------
+
+// Query SELECT * FROM Employees, Roles, Departments with a self join
 function seeAllEmployees() {
   connection.query(
     "SELECT emp.employee_id AS 'ID', concat(emp.first_name, ' ' ,emp.last_name) AS 'Employee', concat(man.first_name, ' ' ,man.last_name) AS 'Manager', Roles.role_title AS 'Role', Roles.role_salary AS 'Salary', Departments.department_name AS 'Department' FROM Employees emp, Employees man, Roles, Departments WHERE emp.role_id = Roles.role_id AND Departments.department_id = Roles.department_id  AND man.employee_id = emp.manager_id UNION  SELECT Employees.employee_id, concat(Employees.first_name, ' ' ,Employees.last_name) AS 'Employee', Employees.manager_id, Roles.role_title AS 'Role', Roles.role_salary AS 'Salary', Departments.department_name AS 'Department' FROM Employees, Roles, Departments WHERE Employees.role_id = Roles.role_id AND Roles.department_id = Departments.department_id AND Employees.manager_id IS NULL ORDER BY ID; ",
@@ -233,6 +242,7 @@ function seeAllEmployees() {
   // console.log("");
 }
 
+// Query: Select * FROM Departments
 function seeAllDepartments() {
   connection.query("SELECT * FROM Departments", (err, results) => {
     if (err) throw err;
@@ -245,6 +255,7 @@ function seeAllDepartments() {
   start();
 }
 
+// Query SELECT * FROM Roles;
 function seeAllRoles() {
   connection.query(
     "SELECT Roles.role_id, Roles.role_title, Roles.role_salary, Departments.department_name FROM Roles, Departments WHERE Roles.department_id = Departments.department_id;",
@@ -263,6 +274,7 @@ function seeAllRoles() {
   start();
 }
 
+// ----------------------- UPDATE  FUNCTIONS ---------------------
 function selectEmployeeToUpdate() {
   connection.query("SELECT * FROM Employees", (err, results) => {
     if (err) throw err;
@@ -449,6 +461,8 @@ function showDirectReports(managerToShow) {
   );
   start();
 }
+
+// ----------------------- DELETE FUNCTIONS ---------------------
 
 function deleteDepartment() {
   connection.query("SELECT * FROM Departments", (err, res) => {
