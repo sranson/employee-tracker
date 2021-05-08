@@ -26,6 +26,7 @@ const start = () => {
         "See All Employees",
         "Update Employee Role",
         "Update Employee Manager",
+        "See All Employees by Manager",
         "Exit",
       ],
     })
@@ -55,6 +56,9 @@ const start = () => {
           break;
         case "Update Employee Manager":
           startManagerUpdate();
+          break;
+        case "See All Employees by Manager":
+          startManagerFilter();
           break;
         case "Exit":
           exitProgram();
@@ -301,8 +305,6 @@ function updateRole(answer) {
 }
 
 function updateRoleInDatabase(empID, roleID) {
-  // console.log(empID);
-  // console.log(roleID);
   connection.query("UPDATE Employees SET ? WHERE ?", [
     {
       role_id: roleID,
@@ -337,7 +339,6 @@ function startManagerUpdate() {
         ])
         .then((answer) => {
           let empToUpdate = answer.employeeManagerUpdate;
-          console.log(` Answer From startManagerUpdate(): ${empToUpdate}`);
           updateManager(empToUpdate);
         });
     }
@@ -385,6 +386,55 @@ function updateManagerInDatabase(empID, managerID) {
     },
   ]);
   console.log("SUCCESSFULLY UPDATED EMPLOYEE MANAGER");
+  start();
+}
+
+function startManagerFilter() {
+  connection.query(
+    "SELECT * FROM Employees WHERE manager_id IS NULL",
+    (err, results) => {
+      if (err) throw err;
+      const mappedManagers = results.map((managerz) => {
+        return {
+          name: `${managerz.first_name} ${managerz.last_name}`,
+          value: managerz.employee_id,
+        };
+      });
+      inquirer
+        .prompt([
+          {
+            name: "managerShowToEmployees",
+            type: "rawlist",
+            message: "Which manager would you like to see direct reports for?",
+            choices: mappedManagers,
+          },
+        ])
+        .then((answer) => {
+          let managerToShow = answer.managerShowToEmployees;
+          showDirectReports(managerToShow);
+        });
+    }
+  );
+}
+
+function showDirectReports(managerToShow) {
+  connection.query(
+    "SELECT Employees.employee_id, Employees.first_name, Employees.last_name, Roles.role_title, Roles.role_salary, Departments.department_name  FROM Employees, Roles, Departments  WHERE ?  AND Employees.role_id = Roles.role_id  AND Roles.department_id = Departments.department_id;",
+    {
+      manager_id: managerToShow,
+    },
+    (err, results) => {
+      if (err) throw err;
+      results.forEach((results) => {
+        console.log(`ID: ${results.employee_id}`);
+        console.log(`Name: ${results.first_name} ${results.last_name}`);
+        console.log(`Role: ${results.role_title}`);
+        console.log(`Salary: ${results.role_salary}`);
+        console.log(`Department: ${results.department_name}`);
+        console.log(`--------------------------------------------------`);
+      });
+    }
+  );
   start();
 }
 
