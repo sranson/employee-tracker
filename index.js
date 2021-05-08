@@ -514,7 +514,34 @@ function deleteRole() {
 }
 
 function deleteEmployee() {
-  console.log(`SOMEONE QUIT OR GOT FIRED!!!!`);
+  connection.query("SELECT * FROM Employees", (err, res) => {
+    if (err) throw err;
+    const mappedPeople = res.map((people) => {
+      return {
+        name: `${people.first_name} ${people.last_name}`,
+        value: people.employee_id,
+      };
+    });
+    inquirer
+      .prompt([
+        {
+          name: "deleteEmployee",
+          type: "rawlist",
+          message: "Which Employee would you like to delete?",
+          choices: mappedPeople,
+        },
+      ])
+      .then((response) => {
+        let personToDelete = response.deleteEmployee;
+        connection.query("DELETE FROM Employees WHERE ?", [
+          {
+            employee_id: personToDelete,
+          },
+        ]);
+        console.log("SUCCESSFULLY DELETED THE EMPLOYEE");
+        start();
+      });
+  });
 }
 
 function exitProgram() {
