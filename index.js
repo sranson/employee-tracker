@@ -27,6 +27,7 @@ const start = () => {
         "Update Employee Role",
         "Update Employee Manager",
         "See All Employees by Manager",
+        "Delete a Department",
         "Exit",
       ],
     })
@@ -59,6 +60,9 @@ const start = () => {
           break;
         case "See All Employees by Manager":
           startManagerFilter();
+          break;
+        case "Delete a Department":
+          deleteDepartment();
           break;
         case "Exit":
           exitProgram();
@@ -436,6 +440,30 @@ function showDirectReports(managerToShow) {
     }
   );
   start();
+}
+
+function deleteDepartment() {
+  connection.query("SELECT * FROM Departments", (err, res) => {
+    if (err) throw err;
+    const mappedDepts = res.map((depts) => {
+      return {
+        name: depts.department_name,
+        value: depts.department_id,
+      };
+    });
+    inquirer
+      .prompt([
+        {
+          name: "deleteDept",
+          type: "rawlist",
+          message: "Which department would you like to delete?",
+          choices: mappedDepts,
+        },
+      ])
+      .then((response) => {
+        console.log(response.deleteDept);
+      });
+  });
 }
 
 function exitProgram() {
