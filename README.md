@@ -4,7 +4,7 @@
 
 ## Description
 
-This is a node.js program that runs in the terminal and utilizes MySQL queries to perform CRUD operations on an Employee Content Management System
+This is a node.js program that runs in the terminal and utilizes MySQL queries to perform CRUD operations on an Employee Content Management System.
 
 ## Table of Contents
 
@@ -22,6 +22,18 @@ To run the program:
 
 ```python
 npm start
+```
+
+To run the database schema, from your MySQL instance, run:
+
+```python
+source schema.sql;
+```
+
+To seed data, from your MySQL instance, run:
+
+```python
+source companySeeds.sql;
 ```
 
 ## Questions
